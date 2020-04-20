@@ -1,0 +1,43 @@
+ServerAliveInterval 15
+ServerAliveCountMax 3
+SendEnv "_JAVA_AWT_WM_NONREPARENTING"
+
+Host gitlab*
+    ForwardX11 no
+
+Host *
+    ForwardAgent yes
+    ForwardX11 yes
+    ForwardX11Trusted yes
+    Compression yes
+
+Host green
+    Hostname w-v-ssh-green-0.maxiv.lu.se
+    IdentityFile ~/.ssh/id_rsa_maxiv
+
+Host blue
+    Hostname w-v-ssh-blue-0.maxiv.lu.se
+    IdentityFile ~/.ssh/id_rsa_maxiv
+
+Host w-v-*
+    StrictHostKeyChecking no
+    IdentityFile ~/.ssh/id_rsa_maxiv
+
+Host machine 
+    Hostname g-v-cc-0.maxiv.lu.se
+    ForwardX11 yes
+
+host hippie
+    Hostname b-v-hippie-cc-0
+    ForwardX11 yes
+
+host b-* b3* b1* hippie
+    IdentityFile ~/.ssh/id_rsa_maxiv
+    StrictHostKeyChecking no
+    ProxyCommand ssh blue -W %h:%p 2>/dev/null
+
+Host g-* machine
+    IdentityFile ~/.ssh/id_rsa_maxiv
+    StrictHostKeyChecking no
+    ProxyCommand ssh green -W %h:%p 2>/dev/null
+
